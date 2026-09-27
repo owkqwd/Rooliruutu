@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rooliruutu – CampusConnect</title>
+    <meta name="description" content="Opiskelijaryhmien työkalu pelisääntöjen sopimiseen, roolien jakamiseen, tehtävien seurantaan ja ongelmien ratkaisuun osana CampusConnect-palvelua." />
+    
+    <!-- OpenGraph ja sosiaalisen median metatiedot -->
+    <meta property="og:title" content="Rooliruutu – CampusConnect" />
+    <meta property="og:description" content="Opiskelijaryhmien työkalu pelisääntöjen sopimiseen, roolien jakamiseen, tehtävien seurantaan ja ongelmien ratkaisuun osana CampusConnect-palvelua." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body>
+    <!-- Saavutettavuus: Hyppylinkki pääsisältöön ruudunlukijoille ja näppäimistökäyttäjille -->
+    <a href="#main-content" class="skip-link">Siirry suoraan pääsisältöön</a>
+
+    <!-- Ruudunlukijoiden aria-live -ilmoitusalue dynaamisille tilamuutoksille -->
+    <div id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Visuaalinen paahtoleipä-ilmoitus (toast) toimenpiteille, kuten koodin kopioinnille -->
+    <div id="toast-message" class="toast-notification" role="status" aria-hidden="true">
+      <span id="toast-text">Kopioitu!</span>
+    </div>
+
+    <!-- YLÄPALKKI: Brändi ja aktiivinen työtila -->
+    <header class="app-header" role="banner">
+      <div class="header-container">
+        <a href="#view-workspace" class="brand-wrapper" id="brand-link" aria-label="CampusConnect Rooliruutu etusivulle">
+          <div class="brand-badge-logo" aria-hidden="true">
+            <img src="/logo.svg" alt="Rooliruutu logo" width="38" height="38" />
+          </div>
+          <div class="brand-titles">
+            <span class="brand-service">CampusConnect</span>
+            <span class="brand-name">Rooliruutu</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <div class="current-workspace-pill" id="header-workspace-badge">
+            <span class="sr-only">Nykyinen työtila: </span>
+            <span id="header-workspace-name">Tiimi Innovaatio</span>
+            <span aria-hidden="true">·</span>
+            <span class="workspace-code-tag" id="header-workspace-code">ROOLI-8492</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-header-leave-workspace" style="display:none;" title="Poistu aktiivisesta työtilasta">
+            <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Poistu työtilasta</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-data" title="Nollaa ja palauta oletustiedot kokeilua varten">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>Alusta demo</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- PÄÄSISÄLTÖ: Kaikki 5 näyttöä yhdellä sivustolla -->
+    <main id="main-content" class="main-content" role="main">
+
+      <!-- ===================================================================
+           NÄYTTÖ 1: TYÖTILAN PERUSTAMINEN / LIITTYMINEN
+           =================================================================== -->
+      <section id="view-workspace" class="screen-view active" aria-labelledby="heading-workspace">
+        <div class="screen-header" style="display:flex; align-items:center; gap:1rem; max-width:640px; margin: 0 auto 1.5rem auto;">
+          <img src="/logo.svg" alt="" width="56" height="56" style="border-radius:var(--radius-md); box-shadow:var(--shadow-card); flex-shrink:0;" aria-hidden="true" />
+          <div>
+            <h1 id="heading-workspace" class="screen-title" style="margin-bottom:0.15rem;">Työtilan perustaminen tai liittyminen</h1>
+            <p class="screen-subtitle">Luo uusi opiskelijaryhmän työtila tai liity ryhmäsi olemassa olevaan tilaan koodilla.</p>
+          </div>
+        </div>
+
+        <!-- Ilmoitus lukituksesta: näytetään ennen kuin työtilaan on liitytty -->
+        <div id="workspace-locked-notice" class="locked-pages-banner" style="max-width: 640px; margin: 0 auto 1.5rem auto;">
+          <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--color-primary); flex-shrink:0;">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <div>
+            <strong style="color:var(--color-text-main); display:block; font-size:var(--font-size-content-name);">Sivut avautuvat työtilaan liittymisen jälkeen</strong>
+            <span>Pelisäännöt, tehtävätaulu, ongelmatilanteet ja loppuarviointi tulevat näkyviin heti, kun perustat työtilan tai liityt ryhmän koodilla.</span>
+          </div>
+        </div>
+
+        <!-- Aktiivisen työtilan tietolaatikko: näytetään kun työtila on jo perustettu/liitytty -->
+        <div id="workspace-active-info" class="card" style="max-width: 640px; margin: 0 auto 1.5rem auto; display:none; border-left: 4px solid var(--color-success);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+                <span class="status-badge status-done" style="font-size:0.75rem;">✓ Työtila aktiivinen</span>
+                <h2 id="active-workspace-title" class="card-title" style="margin-bottom:0;">Digipalveluiden kehitysprojekti</h2>
+              </div>
+              <p class="card-description" style="margin-bottom:0.5rem;">
+                Liittymiskoodi: <strong id="active-workspace-code-text" style="font-family:ui-monospace, monospace; color:var(--color-primary);">ROOLI-8492</strong> (jaa tämä koodi tiimillesi)
+              </p>
+              <div style="font-size:var(--font-size-support-text); color:var(--color-success-text); font-weight:600;">
+                Kaikki näytöt (pelisäännöt, tehtävätaulu, ongelmat ja arviointi) ovat auki.
+              </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" id="btn-goto-rules-direct" class="btn btn-primary btn-sm">
+                <span>Siirry pelisääntöihin &rarr;</span>
+              </button>
+              <button type="button" id="btn-leave-workspace" class="btn btn-secondary btn-sm" title="Kirjaudu ulos työtilasta kokeillaksesi perustamista tai liittymistä uudelleen">
+                <span>Poistu työtilasta</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="max-width: 640px; margin: 0 auto 1.5rem auto;">
+          <!-- Tilan valitsin: Perusta / Liity -->
+          <div class="segmented-mode-selector" role="tablist" aria-label="Työtilan toimintatila">
+            <button type="button" id="tab-create-workspace" class="segment-btn active" role="tab" aria-selected="true" aria-controls="panel-create-workspace">
+              Perusta uusi työtila
+            </button>
+            <button type="button" id="tab-join-workspace" class="segment-btn" role="tab" aria-selected="false" aria-controls="panel-join-workspace">
+              Liity koodilla
+            </button>
+          </div>
+
+          <!-- TILA A: Perusta uusi työtila -->
+          <div id="panel-create-workspace" role="tabpanel" aria-labelledby="tab-create-workspace">
+            <form id="form-create-workspace" onsubmit="return false;">
+              <div class="form-group">
+                <label for="input-workspace-name" class="form-label">Työtilan tai projektin nimi <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                <input type="text" id="input-workspace-name" class="form-input" required value="Digipalveluiden kehitysprojekti" placeholder="Esim. Ohjelmistotuotanto Ryhmä 4" aria-required="true" />
+              </div>
+
+              <div class="form-group">
+                <label for="generated-join-code-display" class="form-label">Automaattisesti generoitu liittymiskoodi</label>
+                <p class="card-description" style="margin-bottom:0.25rem;">Jaa tämä koodi ryhmäsi muille opiskelijoille, jotta he pääsevät samaan työtilaan.</p>
+                <div class="code-display-box">
+                  <span id="generated-join-code-display" class="code-value" aria-label="Liittymiskoodi">ROOLI-8492</span>
+                  <button type="button" id="btn-copy-code" class="btn btn-secondary" aria-label="Kopioi liittymiskoodi leikepöydälle">
+                    <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                    <span id="copy-btn-label">Kopioi koodi</span>
+                  </button>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <button type="submit" id="btn-submit-create" class="btn btn-primary" style="width: 100%;">
+                  <span>Luo työtila ja jatka pelisääntöihin</span>
+                  <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TILA B: Liity koodilla -->
+          <div id="panel-join-workspace" role="tabpanel" aria-labelledby="tab-join-workspace" style="display: none;">
+            <form id="form-join-workspace" onsubmit="return false;">
+              <!-- Virheilmoitus näytetään jos syötetty koodi on väärä -->
+              <div id="join-error-banner" class="alert-banner alert-danger" style="display:none;" role="alert">
+                <div class="banner-content">
+                  <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  <span id="join-error-text">Virheellinen liittymiskoodi. Tarkista koodi ja yritä uudelleen.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input-join-code" class="form-label">Syötä ryhmän saama liittymiskoodi <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                <input type="text" id="input-join-code" class="form-input" style="text-transform: uppercase; font-family: ui-monospace, monospace; letter-spacing: 0.1em;" placeholder="Esim. ROOLI-8492" required aria-required="true" />
+                <p class="card-description" style="margin-top: 0.35rem; margin-bottom: 0;">
+                  Voit kokeilla olemassa olevaa koodia: <strong id="hint-valid-code">ROOLI-8492</strong> tai <strong id="hint-demo-code">CAMPUS-2026</strong>.
+                </p>
+              </div>
+
+              <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <button type="submit" id="btn-submit-join" class="btn btn-primary" style="width: 100%;">
+                  <span>Liity työtilaan</span>
+                  <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           NÄYTTÖ 2: PELISÄÄNNÖT JA ROOLIT (EI-LINEAARINEN NÄKYMÄ)
+           =================================================================== -->
+      <section id="view-rules" class="screen-view" aria-labelledby="heading-rules">
+        <div class="screen-header">
+          <h1 id="heading-rules" class="screen-title">Pelisäännöt ja ryhmän roolit</h1>
+          <p class="screen-subtitle">Valitse osio, jota haluat tarkastella tai muokata. Voit siirtyä sääntöjen ja roolien välillä joustavasti.</p>
+        </div>
+
+        <!-- Osion sisäinen tilavalitsin (Yleiskatsaus, Pelisäännöt, Roolit) -->
+        <nav class="rules-subview-nav" aria-label="Pelisääntöjen ja roolien valitsin" role="tablist">
+          <button type="button" class="rules-subview-btn active" id="subtab-rules-hub" role="tab" aria-selected="true" aria-controls="rules-panel-hub">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+              <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+              <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+              <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+            </svg>
+            <span>Yleiskatsaus</span>
+          </button>
+          <button type="button" class="rules-subview-btn" id="subtab-rules-list" role="tab" aria-selected="false" aria-controls="rules-panel-rules">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span id="tab-label-rules">Pelisäännöt (4)</span>
+          </button>
+          <button type="button" class="rules-subview-btn" id="subtab-roles-mgmt" role="tab" aria-selected="false" aria-controls="rules-panel-roles">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span id="tab-label-roles">Tiimin roolit (5)</span>
+          </button>
+        </nav>
+
+        <!-- TILA 1: YLEISKATSAUS (HUB) -->
+        <div id="rules-panel-hub" role="tabpanel" aria-labelledby="subtab-rules-hub">
+          <div class="rules-hub-grid">
+            <!-- Hub-kortti 1: Pelisäännöt -->
+            <div class="hub-card">
+              <div>
+                <div class="hub-card-header">
+                  <div class="hub-card-icon-title">
+                    <div class="hub-card-icon-badge" aria-hidden="true">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 class="card-title" style="margin-bottom:0.25rem;">Ryhmän pelisäännöt</h2>
+                      <span id="hub-rules-badge" class="status-badge status-done" style="font-size:0.75rem;">4 sääntöä sovittu</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-description" style="margin-top:0.75rem; margin-bottom:1rem;">
+                  Yhteiset toimintatavat, viestintäesteiden ilmoittaminen ja deadlinet ryhmätyön sujuvoittamiseksi.
+                </p>
+                <!-- Esikatselulaatikko -->
+                <div id="hub-rules-preview" class="hub-preview-box" aria-label="Sääntöjen esikatselu">
+                  <!-- Täytetään dynaamisesti -->
+                </div>
+              </div>
+
+              <div class="hub-card-actions">
+                <button type="button" id="btn-hub-view-rules" class="btn btn-primary" style="width:100%; justify-content:center;">
+                  <span>Katso ja muokkaa sääntöjä</span>
+                  <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+                <button type="button" id="btn-hub-quick-add-rule" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
+                  <span>+ Lisää uusi sääntö heti</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Hub-kortti 2: Tiimin roolit -->
+            <div class="hub-card">
+              <div>
+                <div class="hub-card-header">
+                  <div class="hub-card-icon-title">
+                    <div class="hub-card-icon-badge" aria-hidden="true">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 class="card-title" style="margin-bottom:0.25rem;">Tiimin vastuuroolit</h2>
+                      <span id="hub-members-badge" class="status-badge status-done" style="font-size:0.75rem;">5 jäsentä roolitettu</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-description" style="margin-top:0.75rem; margin-bottom:1rem;">
+                  Jokaisella tiimiläisellä on nimetty vastuurooli. Roolit kiertävät viikoittain tai etappien mukaan.
+                </p>
+                <!-- Esikatselulaatikko -->
+                <div id="hub-roles-preview" class="hub-preview-box" aria-label="Roolien esikatselu">
+                  <!-- Täytetään dynaamisesti -->
+                </div>
+              </div>
+
+              <div class="hub-card-actions">
+                <button type="button" id="btn-hub-view-roles" class="btn btn-primary" style="width:100%; justify-content:center;">
+                  <span>Katso ja jaa roolit</span>
+                  <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+                <button type="button" id="btn-hub-rotate-roles" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
+                  <span>Kierrätä rooleja seuraavalle</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TILA 2: PELISÄÄNNÖT (KATSO JA MUOKKAA SÄÄNTÖJÄ) -->
+        <div id="rules-panel-rules" role="tabpanel" aria-labelledby="subtab-rules-list" style="display:none;">
+          <div class="subpanel-nav-bar">
+            <button type="button" class="btn btn-secondary btn-sm btn-back-to-hub">
+              <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5"></path>
+                <path d="m12 19-7-7 7-7"></path>
+              </svg>
+              <span>&larr; Takaisin yleiskatsaukseen</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm btn-switch-to-roles">
+              <span>Siirry rooleihin &rarr;</span>
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <h2 class="card-title">Ryhmän sovitut pelisäännöt</h2>
+                <p class="card-description" style="margin-bottom:0;">Pelisäännöt ohjaavat viestintää, aikatauluja ja vastuunottoa. Voit muokata sääntöjä suoraan listasta.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-preset-rules">
+                Lataa suositellut pelisäännöt
+              </button>
+            </div>
+
+            <!-- Uuden säännön lisäyslomake -->
+            <form id="form-add-rule" class="form-row" onsubmit="return false;" style="margin-bottom: 1.5rem;">
+              <div style="flex:1;">
+                <label for="input-new-rule" class="sr-only">Kirjoita uusi pelisääntö</label>
+                <input type="text" id="input-new-rule" class="form-input" placeholder="Kirjoita uusi pelisääntö (esim. Ilmoitetaan esteistä vähintään 4h ennen)..." />
+              </div>
+              <button type="submit" id="btn-add-rule" class="btn btn-primary">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Lisää sääntö</span>
+              </button>
+            </form>
+
+            <!-- Lista jo lisätyistä säännöistä -->
+            <ul id="rules-list-container" class="rules-list" aria-label="Ryhmän sovitut pelisäännöt">
+              <!-- Luodaan dynaamisesti JavaScriptillä -->
+            </ul>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap; gap: 1rem; border-top: 1px solid var(--color-border-subtle); padding-top: 1.25rem;">
+              <button type="button" class="btn btn-secondary btn-sm btn-back-to-hub">
+                <span>&larr; Palaa yleiskatsaukseen</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-switch-to-roles">
+                <span>Jatka roolien jakamiseen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TILA 3: TIIMIN ROOLIT JA JÄSENET (KATSO JA JAA ROOLIT) -->
+        <div id="rules-panel-roles" role="tabpanel" aria-labelledby="subtab-roles-mgmt" style="display:none;">
+          <div class="subpanel-nav-bar">
+            <button type="button" class="btn btn-secondary btn-sm btn-back-to-hub">
+              <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5"></path>
+                <path d="m12 19-7-7 7-7"></path>
+              </svg>
+              <span>&larr; Takaisin yleiskatsaukseen</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm btn-switch-to-rules">
+              <span>&larr; Siirry sääntöihin</span>
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <h2 class="card-title">Ryhmän roolit ja jäsenet</h2>
+                <p class="card-description" style="margin-bottom:0;">Määrittele kullekin tiimin jäsenelle vastuurooli. Roolit kiertävät projektin aikana.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-member-modal-trigger">
+                + Lisää uusi jäsen tiimiin
+              </button>
+            </div>
+
+            <!-- Roolien esittelykortit -->
+            <div class="roles-grid" aria-label="Roolikuvaukset">
+              <div class="role-card">
+                <div class="role-card-header">
+                  <span class="role-tag">1. Aikatauluttaja</span>
+                </div>
+                <p class="role-explanation">Valvoo välitavoitteita ja deadlineja. Muistuttaa tiimiä sovitusta aikataulusta hyvissä ajoin.</p>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header">
+                  <span class="role-tag">2. Kokoaja</span>
+                </div>
+                <p class="role-explanation">Vastaa eri osioiden ja tiedostojen yhdistämisestä yhtenäiseksi ja johdonmukaiseksi kokonaisuudeksi.</p>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header">
+                  <span class="role-tag">3. Viimeistelijä</span>
+                </div>
+                <p class="role-explanation">Tarkistaa laadun, kieliasun, lähdeviitteet ja varmistaa että työ täyttää kaikki arviointikriteerit.</p>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header">
+                  <span class="role-tag">4. Yhteyshenkilö</span>
+                </div>
+                <p class="role-explanation">Hoitaa viestinnän kurssin opettajalle, ohjaajalle tai toimeksiantajalle ja välittää viestit tiimille.</p>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header">
+                  <span class="role-tag">5. Seuraaja</span>
+                </div>
+                <p class="role-explanation">Havainnoi ryhmädynamiikkaa, seuraa fiilistä ja varmistaa, että jokainen pääsee osallistumaan ja sanomaan mielipiteensä.</p>
+              </div>
+            </div>
+
+            <!-- Tiimin jäsenten roolivalinnat -->
+            <h3 style="font-size: var(--font-size-content-name); font-weight: 600; margin-bottom: 0.75rem;">Määritä jäsenten nykyiset roolit:</h3>
+            <div id="members-roles-assignment-list" style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom: 1.5rem;">
+              <!-- Renderöidään dynaamisesti JavaScriptillä -->
+            </div>
+
+            <!-- Vahvista-painike vie tehtävätauluun -->
+            <div style="display: flex; justify-content: space-between; align-items:center; flex-wrap:wrap; gap: 1rem; border-top: 1px solid var(--color-border-subtle); padding-top: 1.25rem;">
+              <button type="button" class="btn btn-secondary btn-sm btn-back-to-hub">
+                <span>&larr; Palaa yleiskatsaukseen</span>
+              </button>
+              <button type="button" id="btn-confirm-rules-and-roles" class="btn btn-primary">
+                <span>Vahvista roolit ja siirry tehtävätauluun</span>
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           NÄYTTÖ 3: TEHTÄVÄTAULU
+           =================================================================== -->
+      <section id="view-tasks" class="screen-view" aria-labelledby="heading-tasks">
+        <div class="screen-header">
+          <h1 id="heading-tasks" class="screen-title">Projektin tehtävätaulu</h1>
+          <p class="screen-subtitle">Seuraa tehtävien etenemistä ja päivitä tila klikkaamalla tehtäväkorttia.</p>
+        </div>
+
+        <!-- 3A. Kiertävät roolit ylälaidassa -->
+        <div class="rotating-roles-banner">
+          <div class="rotating-roles-title">
+            <span>Kiertävät roolit juuri nyt</span>
+            <button type="button" id="btn-rotate-roles" class="btn btn-secondary btn-sm" title="Siirrä roolit seuraavalle tiimin jäsenelle">
+              <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <span>Kierrätä rooleja</span>
+            </button>
+          </div>
+          <div id="rotating-roles-chips" class="roles-chips-container">
+            <!-- Täytetään dynaamisesti JS:llä -->
+          </div>
+        </div>
+
+        <!-- 3B. Projektin yleinen edistymispalkki -->
+        <div class="progress-panel">
+          <div class="progress-header">
+            <span>Projektin kokonaisedistyminen</span>
+            <span id="progress-percentage-label" style="color: var(--color-primary); font-weight:700;">0 %</span>
+          </div>
+          <div class="progress-bar-track" role="progressbar" id="main-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Projektin valmiusaste">
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+          <p id="progress-tasks-count" class="card-description" style="margin-top: 0.35rem; margin-bottom: 0;">0 / 0 tehtävää valmiina</p>
+        </div>
+
+        <!-- 3C. Huomautus viivästyksestä jos jokin tehtävä on myöhässä -->
+        <div id="overdue-alert-banner" class="alert-banner alert-danger" style="display: none;" role="region" aria-label="Huomautus viivästyksestä">
+          <div class="banner-content">
+            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>
+              <strong id="overdue-banner-text">Huomio: Yksi tai useampi tehtävä on myöhässä!</strong>
+              <div style="font-size: var(--font-size-small); opacity: 0.9;">Tarkista ryhmän sovitut käytännöt ongelman ratkaisemiseksi.</div>
+            </div>
+          </div>
+          <button type="button" id="btn-goto-issues" class="btn btn-danger btn-sm">
+            <span>Siirry ongelmatilanteeseen</span>
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 3D. Tehtävien hallintapalkki: Lisää tehtävä & suodatus -->
+        <div class="tasks-toolbar">
+          <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+            <span style="font-size: var(--font-size-support-text); font-weight:700; margin-right:0.25rem;">Suodata:</span>
+            <button type="button" class="btn btn-secondary btn-sm task-filter-btn active" data-filter="all">Kaikki</button>
+            <button type="button" class="btn btn-secondary btn-sm task-filter-btn" data-filter="in_progress">Kesken</button>
+            <button type="button" class="btn btn-secondary btn-sm task-filter-btn" data-filter="overdue">Myöhässä</button>
+            <button type="button" class="btn btn-secondary btn-sm task-filter-btn" data-filter="done">Valmis</button>
+          </div>
+          <button type="button" id="btn-open-new-task-modal" class="btn btn-primary btn-sm">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>+ Lisää uusi tehtävä</span>
+          </button>
+        </div>
+
+        <p class="card-description" style="margin-top: 0.5rem; margin-bottom: 0;">
+          💡 <em>Vinkki: Klikkaa mitä tahansa tehtäväkorttia vaihtaaksesi sen tilaa (Kesken &rarr; Valmis &rarr; Myöhässä &rarr; Kesken).</em>
+        </p>
+
+        <!-- Tehtäväkorttien ruudukko -->
+        <div id="tasks-container" class="task-grid" aria-label="Tehtäväkortit">
+          <!-- Renderöidään dynaamisesti JavaScriptillä -->
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           NÄYTTÖ 4: ONGELMATILANNE JA ESKALOINTI
+           =================================================================== -->
+      <section id="view-issues" class="screen-view" aria-labelledby="heading-issues">
+        <div class="screen-header">
+          <h1 id="heading-issues" class="screen-title">Ongelmatilanteet ja viivästyksen ratkaisu</h1>
+          <p class="screen-subtitle">Vaiheistetut toimenpiteet ja selkeät ohjeet projektin pulmatilanteiden ratkaisemiseen.</p>
+        </div>
+
+        <!-- 4A. Havaitun viivästyksen tiedot -->
+        <div class="card" style="border-left: 4px solid var(--color-danger);">
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+            <svg class="nav-icon" style="color:var(--color-danger);" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h2 class="card-title" style="margin-bottom:0;">Havaitut viivästykset ja myöhässä olevat tehtävät</h2>
+          </div>
+          
+          <div id="issues-detected-container">
+            <!-- Luodaan dynaamisesti JS:llä -->
+          </div>
+        </div>
+
+        <!-- 4B. Vaiheistetut toimintaohjeet -->
+        <div class="card">
+          <h2 class="card-title">Vaiheistetut toimintaohjeet tiimille</h2>
+          <p class="card-description">Noudata näitä sovittuja askeleita järjestyksessä ennen kuin tilanne eskaloidaan opettajalle.</p>
+
+          <div class="issues-timeline">
+            <!-- Vaihe 1 -->
+            <div class="timeline-step">
+              <div class="step-indicator" aria-hidden="true">1</div>
+              <div class="step-body">
+                <h3 class="step-title">Vaihe 1: Ryhmän oma sovittu käytäntö</h3>
+                <p class="step-description">
+                  Ota välittömästi matalan kynnyksen yhteyttä jumiutuneeseen tiimiläiseen ryhmän viestintäkanavassa (esim. WhatsApp/Discord). Kysy ystävällisesti esteen syytä, pilkkokaa tehtävä pienempiin osiin tai järjestäkää roolien vaihto tai työpari auttamaan.
+                </p>
+                <div style="margin-top:0.5rem; font-size:var(--font-size-support-text); color:var(--color-primary); font-weight:600;">
+                  Sovittu aikaikkuna: 24 tuntia yhteydenottoon.
+                </div>
+              </div>
+            </div>
+
+            <!-- Vaihe 2 -->
+            <div class="timeline-step">
+              <div class="step-indicator" aria-hidden="true">2</div>
+              <div class="step-body">
+                <h3 class="step-title">Vaihe 2: Ylimääräinen ryhmätapaaminen ja tilannearvio</h3>
+                <p class="step-description">
+                  Järjestäkää nopea 15 minuutin tilannekatsaus (läsnä tai etänä). Tarkistakaa projektin kokonaisaikataulu: voidaanko tehtävän laajuutta supistaa tai jakaa jäljellä oleva työ tasan kaikkien kesken?
+                </p>
+                <div style="margin-top:0.5rem; font-size:var(--font-size-support-text); color:var(--color-primary); font-weight:600;">
+                  Määritelkää sitova uusi 24h välitavoite.
+                </div>
+              </div>
+            </div>
+
+            <!-- Vaihe 3 -->
+            <div class="timeline-step">
+              <div class="step-indicator" aria-hidden="true">3</div>
+              <div class="step-body">
+                <h3 class="step-title">Vaihe 3: Eskalointi kurssin opettajalle</h3>
+                <p class="step-description">
+                  Jos jäseneen ei saada yhteyttä 48 tunnin kuluessa tai omatoiminen sovittelu ei tuota tulosta, vastuuhenkilö (yhteyshenkilö) ilmoittaa tilanteesta kurssin vastuuopettajalle CampusConnect-järjestelmän kautta.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4C. Eskalointipainike ja tila -->
+          <div id="escalation-action-area" class="escalation-box">
+            <div id="escalation-prompt-state">
+              <h3 style="font-size: var(--font-size-content-name); font-weight:700; color:var(--color-danger-text); margin-bottom: 0.35rem;">
+                Tarvitaanko ohjaajan väliintuloa?
+              </h3>
+              <p style="font-size: var(--font-size-support-text); color:var(--color-text-main); margin-bottom: 1rem;">
+                Jos ryhmän oma ratkaisuyritys (vaiheet 1 ja 2) ei ole auttanut, voit käynnistää virallisen eskalointipyynnön kurssin ohjaajalle.
+              </p>
+              <button type="button" id="btn-trigger-escalate" class="btn btn-danger">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Eskaloi opettajalle</span>
+              </button>
+            </div>
+
+            <!-- Vahvistettu eskalointitila (näytetään kun käyttäjä on eskaloinut) -->
+            <div id="escalation-confirmed-state" style="display:none;" role="status">
+              <div style="display:flex; align-items:flex-start; gap:0.75rem; margin-bottom: 1rem;">
+                <svg class="nav-icon" style="color:var(--color-danger); width:24px; height:24px; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <div>
+                  <h3 style="font-size: var(--font-size-content-name); font-weight:700; color:var(--color-danger-text); margin-bottom: 0.25rem;">
+                    Eskalointipyyntö lähetetty opettajalle!
+                  </h3>
+                  <p style="font-size: var(--font-size-support-text); color:var(--color-text-main); margin-bottom:0.25rem;">
+                    Kurssin vastuuopettajalle on lähetetty automaattinen ilmoitus tilanteesta ja viivästyneistä tehtävistä. Opettaja ottaa yhteyttä tiimin yhteyshenkilöön 24 tunnin kuluessa.
+                  </p>
+                  <div style="font-size: var(--font-size-small); font-family: ui-monospace, monospace; color: var(--color-danger);">
+                    Asiaviite: #CC-ESK-<span id="escalation-reference-code">8492</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" id="btn-cancel-escalate" class="btn btn-secondary">
+                <span>Peruuta eskalointi (Asia sovittu tiimin kesken)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Paluu tehtävätauluun -->
+          <div style="display:flex; justify-content: flex-start; margin-top: 1.5rem;">
+            <button type="button" id="btn-back-to-tasks" class="btn btn-secondary">
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+              <span>Palaa tehtävätauluun</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           NÄYTTÖ 5: LOPPUARVIOINTI
+           =================================================================== -->
+      <section id="view-evaluation" class="screen-view" aria-labelledby="heading-evaluation">
+        <div class="screen-header">
+          <h1 id="heading-evaluation" class="screen-title">Projektin loppuarviointi</h1>
+          <p class="screen-subtitle">Arvioi ryhmätyön sujuvuus, sovittujen pelisääntöjen toimivuus ja tiimin jäsenten panos.</p>
+        </div>
+
+        <form id="form-evaluation" class="card" onsubmit="return false;">
+          <!-- 5A. Tähtiasteikko 1-5 arviointikohteille -->
+          <h2 class="card-title" style="margin-bottom:1rem;">Ryhmätyön arviointikohteet (1–5 tähteä)</h2>
+
+          <!-- Kohde 1: Pelisääntöjen noudattaminen -->
+          <div class="rating-group">
+            <div class="rating-header">
+              <span id="label-rating-rules" class="rating-title">1. Pelisääntöjen noudattaminen</span>
+              <span id="score-text-rules" class="rating-score-text">4 / 5</span>
+            </div>
+            <p class="card-description" style="margin-bottom:0.5rem;">Miten hyvin ryhmä piti kiinni sovituista säännöistä ja viestinnästä?</p>
+            <div class="star-rating-row" role="radiogroup" aria-labelledby="label-rating-rules" id="stars-rules" data-rating="4">
+              <button type="button" class="star-btn active" data-val="1" aria-label="1 tähti, välttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="2" aria-label="2 tähteä, tyydyttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="3" aria-label="3 tähteä, hyvä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="4" aria-label="4 tähteä, erittäin hyvä" aria-checked="true">★</button>
+              <button type="button" class="star-btn" data-val="5" aria-label="5 tähteä, erinomainen" aria-checked="false">★</button>
+            </div>
+          </div>
+
+          <!-- Kohde 2: Roolien toimivuus -->
+          <div class="rating-group">
+            <div class="rating-header">
+              <span id="label-rating-roles" class="rating-title">2. Vastuuroolien toimivuus</span>
+              <span id="score-text-roles" class="rating-score-text">5 / 5</span>
+            </div>
+            <p class="card-description" style="margin-bottom:0.5rem;">Auttoivatko määritellyt roolit (aikatauluttaja, kokoaja jne.) selkeyttämään työnjakoa?</p>
+            <div class="star-rating-row" role="radiogroup" aria-labelledby="label-rating-roles" id="stars-roles" data-rating="5">
+              <button type="button" class="star-btn active" data-val="1" aria-label="1 tähti, välttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="2" aria-label="2 tähteä, tyydyttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="3" aria-label="3 tähteä, hyvä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="4" aria-label="4 tähteä, erittäin hyvä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="5" aria-label="5 tähteä, erinomainen" aria-checked="true">★</button>
+            </div>
+          </div>
+
+          <!-- Kohde 3: Oma ja tiimin panos -->
+          <div class="rating-group">
+            <div class="rating-header">
+              <span id="label-rating-contribution" class="rating-title">3. Oma ja ryhmän yhteinen panos</span>
+              <span id="score-text-contribution" class="rating-score-text">4 / 5</span>
+            </div>
+            <p class="card-description" style="margin-bottom:0.5rem;">Osallistuivatko kaikki jäsenet tasapuolisesti ja sitoutuneesti lopputulokseen?</p>
+            <div class="star-rating-row" role="radiogroup" aria-labelledby="label-rating-contribution" id="stars-contribution" data-rating="4">
+              <button type="button" class="star-btn active" data-val="1" aria-label="1 tähti, välttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="2" aria-label="2 tähteä, tyydyttävä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="3" aria-label="3 tähteä, hyvä" aria-checked="false">★</button>
+              <button type="button" class="star-btn active" data-val="4" aria-label="4 tähteä, erittäin hyvä" aria-checked="true">★</button>
+              <button type="button" class="star-btn" data-val="5" aria-label="5 tähteä, erinomainen" aria-checked="false">★</button>
+            </div>
+          </div>
+
+          <!-- 5B. Tiimin jäsenlista -->
+          <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+            <h3 style="font-size: var(--font-size-content-name); font-weight:600; margin-bottom: 0.5rem;">Tiimin jäsenet ja suoritus</h3>
+            <div id="evaluation-members-list" aria-label="Tiimin jäsenet">
+              <!-- Renderöidään dynaamisesti JS:llä -->
+            </div>
+          </div>
+
+          <!-- 5C. Vapaan sanan tekstikenttä -->
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="evaluation-free-text" class="form-label">Vapaan sanan palaute ja kehitysehdotukset</label>
+            <p class="card-description" style="margin-bottom:0.5rem;">Mitä opitte ryhmätyöskentelystä? Mikä toimi erinomaisesti ja mitä teette toisin seuraavassa projektissa?</p>
+            <textarea id="evaluation-free-text" class="form-textarea" placeholder="Kirjoita tähän ryhmän yhteiset huomiot tai oma näkemyksesi..."></textarea>
+          </div>
+
+          <!-- 5D. Tallenna ja lähetä arviointi -painike -->
+          <div style="display:flex; justify-content: flex-end;">
+            <button type="button" id="btn-submit-evaluation" class="btn btn-primary" style="min-width: 220px;">
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              <span>Tallenna ja lähetä arviointi</span>
+            </button>
+          </div>
+
+          <!-- Kiitosviesti ja yhteenveto lähetyksen jälkeen -->
+          <div id="evaluation-success-container" class="alert-banner alert-success" style="display:none; margin-top: 1.5rem;" role="status">
+            <div class="banner-content" style="align-items:flex-start;">
+              <svg class="nav-icon" style="color:var(--color-success); width:24px; height:24px; flex-shrink:0; margin-top:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <div>
+                <strong style="font-size: var(--font-size-content-name); display:block; margin-bottom: 0.25rem;">Kiitos arvioinnista!</strong>
+                <p style="font-size: var(--font-size-support-text); margin-bottom: 0.5rem;">
+                  Ryhmäsi arviointi on tallennettu onnistuneesti CampusConnect-järjestelmään ja lähetetty kurssin ohjaajalle.
+                </p>
+                <div id="evaluation-summary-details" style="font-size:var(--font-size-small); font-weight:600; color:var(--color-success-text);">
+                  <!-- Keskiarvo ja aikaleima lisätään tähän JS:llä -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- ALAPALKKINAVIGAATIO: Helppo siirtyminen kaikkien 5 näytön välillä -->
+    <nav class="navigation-bar" aria-label="Päänäyttöjen navigaatio">
+      <div class="nav-container">
+        <!-- 1. Työtila -->
+        <button type="button" class="nav-item active" data-target="view-workspace" id="nav-btn-workspace" aria-current="page">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+            <path d="M3 9h18"></path>
+            <path d="M9 21V9"></path>
+          </svg>
+          <span>Työtila</span>
+        </button>
+
+        <!-- 2. Pelisäännöt & Roolit (Näkyy vasta kun työtilaan on liitytty/perustettu) -->
+        <button type="button" class="nav-item nav-restricted nav-locked" data-target="view-rules" id="nav-btn-rules">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>Pelisäännöt</span>
+        </button>
+
+        <!-- 3. Tehtävätaulu (Näkyy vasta kun työtilaan on liitytty/perustettu) -->
+        <button type="button" class="nav-item nav-restricted nav-locked" data-target="view-tasks" id="nav-btn-tasks">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+          <span>Tehtävätaulu</span>
+        </button>
+
+        <!-- 4. Ongelmatilanne (Näkyy vasta kun työtilaan on liitytty/perustettu) -->
+        <button type="button" class="nav-item nav-restricted nav-locked" data-target="view-issues" id="nav-btn-issues">
+          <span id="nav-overdue-dot" class="nav-badge-alert" style="display:none;" aria-label="Tehtäviä myöhässä"></span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Ongelmat</span>
+        </button>
+
+        <!-- 5. Loppuarviointi (Näkyy vasta kun työtilaan on liitytty/perustettu) -->
+        <button type="button" class="nav-item nav-restricted nav-locked" data-target="view-evaluation" id="nav-btn-evaluation">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>Arviointi</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MODAALI: Uuden tehtävän lisäys -->
+    <div id="modal-new-task" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-task-title">
+      <div class="modal-card">
+        <h2 id="modal-task-title" class="card-title">Lisää uusi tehtävä projektille</h2>
+        
+        <form id="form-create-task" onsubmit="return false;">
+          <div class="form-group">
+            <label for="task-input-title" class="form-label">Tehtävän otsikko <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+            <input type="text" id="task-input-title" class="form-input" placeholder="Esim. Haastattelujen litterointi" required />
+          </div>
+
+          <div class="form-group">
+            <label for="task-input-desc" class="form-label">Tehtävän kuvaus</label>
+            <textarea id="task-input-desc" class="form-textarea" placeholder="Mitä tehtävässä tehdään ja mikä on tavoite?"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex:1;">
+              <label for="task-input-assignee" class="form-label">Vastuuhenkilö</label>
+              <select id="task-input-assignee" class="form-select">
+                <!-- Täytetään dynaamisesti tiimiläisillä -->
+              </select>
+            </div>
+
+            <div class="form-group" style="flex:1;">
+              <label for="task-input-status" class="form-label">Alkutapahtuma</label>
+              <select id="task-input-status" class="form-select">
+                <option value="in_progress">Kesken</option>
+                <option value="done">Valmis</option>
+                <option value="overdue">Myöhässä</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1rem;">
+            <button type="button" id="btn-cancel-new-task" class="btn btn-secondary">Peruuta</button>
+            <button type="submit" id="btn-save-new-task" class="btn btn-primary">Tallenna tehtävä</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAALI: Uuden jäsenen lisäys tiimiin -->
+    <div id="modal-add-member" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-member-title">
+      <div class="modal-card">
+        <h2 id="modal-member-title" class="card-title">Lisää uusi jäsen ryhmään</h2>
+        
+        <form id="form-create-member" onsubmit="return false;">
+          <div class="form-group">
+            <label for="member-input-name" class="form-label">Opiskelijan nimi <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+            <input type="text" id="member-input-name" class="form-input" placeholder="Esim. Anni Opiskelija" required />
+          </div>
+
+          <div class="form-group">
+            <label for="member-input-role" class="form-label">Aloitusrooli</label>
+            <select id="member-input-role" class="form-select">
+              <option value="Aikatauluttaja">Aikatauluttaja</option>
+              <option value="Kokoaja">Kokoaja</option>
+              <option value="Viimeistelijä">Viimeistelijä</option>
+              <option value="Yhteyshenkilö">Yhteyshenkilö</option>
+              <option value="Seuraaja" selected>Seuraaja</option>
+            </select>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1rem;">
+            <button type="button" id="btn-cancel-add-member" class="btn btn-secondary">Peruuta</button>
+            <button type="submit" id="btn-save-add-member" class="btn btn-primary">Lisää jäsen</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Pääskripti: Sovelluslogiikka puhtaalla, selkeästi kommentoidulla TypeScriptillä/JavaScriptillä -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

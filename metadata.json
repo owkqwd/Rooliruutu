@@ -1,0 +1,7 @@
+{
+  "name": "Rooliruutu - CampusConnect",
+  "description": "Opiskelijaryhmien työkalu pelisääntöjen sopimiseen, roolien jakamiseen, tehtävien seurantaan ja ongelmien ratkaisuun osana CampusConnect-palvelua.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
