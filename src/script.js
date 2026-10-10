@@ -1,10 +1,4 @@
-/**
- * ROOLIRUUTU - KEVYT JAVASCRIPT (3-SIVUINEN SOVELLUS)
- * Puhdas vanilla JS ilman riippuvuuksia tai kehyksiä.
- * Hoitaa sivujen vaihdon, työtilan hallinnan, säännöt, roolit ja tehtävätaulun.
- */
 
-// Oletustiedot
 const DEFAULT_WORKSPACE = {
   isJoined: true,
   name: "Digipalveluiden kehitysprojekti",
@@ -102,7 +96,6 @@ const DEFAULT_TASKS = [
   }
 ];
 
-// Sovelluksen tila
 let appState = {
   workspace: { ...DEFAULT_WORKSPACE },
   rules: [...DEFAULT_RULES],
@@ -110,7 +103,6 @@ let appState = {
   tasks: [...DEFAULT_TASKS]
 };
 
-// Paikallisen tallennuksen avaimet
 const STORAGE_KEY = "campusconnect_state_v1";
 
 function loadState() {
@@ -132,19 +124,15 @@ function saveState() {
   }
 }
 
-// 1. SIVUNVAIHTO (SCREEN SWITCHER)
 function switchScreen(targetId) {
-  // Piilotetaan kaikki sivut
   const screens = document.querySelectorAll(".screen-view");
   screens.forEach((screen) => screen.classList.remove("active"));
 
-  // Näytetään kohdesivu
   const targetScreen = document.getElementById(targetId);
   if (targetScreen) {
     targetScreen.classList.add("active");
   }
 
-  // Päivitetään navigaation aktiivinen välilehti
   const navTabs = document.querySelectorAll(".nav-tab");
   navTabs.forEach((tab) => {
     if (tab.getAttribute("data-target") === targetId) {
@@ -154,11 +142,9 @@ function switchScreen(targetId) {
     }
   });
 
-  // Skrollaus pehmeästi sivun yläosaan
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// 2. YLÄPALKIN JA TYÖTILAN NÄKYMYKSEN PÄIVITYS
 function updateWorkspaceUI() {
   const headerName = document.getElementById("header-workspace-name");
   const headerCode = document.getElementById("header-workspace-code");
@@ -185,7 +171,6 @@ function updateWorkspaceUI() {
   }
 }
 
-// 3. SÄÄNTÖJEN RENDERÖINTI
 function renderRules() {
   const container = document.getElementById("rules-container");
   if (!container) return;
@@ -210,7 +195,6 @@ function renderRules() {
     container.appendChild(article);
   });
 
-  // Poistonapit
   container.querySelectorAll(".btn-delete-rule").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-id");
@@ -221,7 +205,6 @@ function renderRules() {
   });
 }
 
-// 4. ROOLIEN RENDERÖINTI
 function renderRoles() {
   const container = document.getElementById("roles-container");
   if (!container) return;
@@ -261,7 +244,6 @@ function renderRoles() {
   });
 }
 
-// 5. TEHTÄVIEN RENDERÖINTI (KANBAN)
 function renderTasks() {
   const colTodo = document.getElementById("tasks-col-todo");
   const colInProgress = document.getElementById("tasks-col-in-progress");
@@ -371,7 +353,6 @@ function renderTasks() {
     }
   });
 
-  // Tyhjien sarakkeiden yhdenmukainen näkymä
   if (todoCount === 0) {
     colTodo.innerHTML = `
       <div class="kanban-empty-state">
@@ -394,7 +375,7 @@ function renderTasks() {
     `;
   }
 
-  // Laskurit
+  
   const total = appState.tasks.length;
   if (countTotal) countTotal.textContent = total;
   if (countTodo) countTodo.textContent = todoCount;
@@ -419,7 +400,6 @@ function renderTasks() {
     });
   });
 
-  // Tehtävän poisto
   document.querySelectorAll(".btn-delete-task").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-id");
@@ -430,7 +410,6 @@ function renderTasks() {
   });
 }
 
-// XSS-suojaus apufunktio
 function escapeHTML(str) {
   if (!str) return "";
   return String(str)
@@ -441,11 +420,9 @@ function escapeHTML(str) {
     .replace(/'/g, "&#039;");
 }
 
-// 6. ALUSTUS JA TAPAHTUMANKUUNTELIJAT
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
 
-  // Ylävalikon napit
   const navTabs = document.querySelectorAll(".nav-tab");
   navTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -454,7 +431,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Kaikki sivun sisäiset siirtymänapit (data-screen-link)
   document.querySelectorAll("[data-screen-link]").forEach((linkBtn) => {
     linkBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -463,7 +439,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Brand-logo palaa aina aloitussivulle
   const brandLink = document.getElementById("brand-home-link");
   if (brandLink) {
     brandLink.addEventListener("click", (e) => {
@@ -472,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Työtilan poistumispainike (etusivulla hyvin pienesti!)
   const btnLeave = document.getElementById("btn-leave-workspace");
   if (btnLeave) {
     btnLeave.addEventListener("click", () => {
@@ -482,7 +456,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Työtilan perustamislomake
   const formCreate = document.getElementById("form-create-workspace");
   if (formCreate) {
     formCreate.addEventListener("submit", (e) => {
@@ -502,7 +475,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Työtilaan liittymislomake
   const formJoin = document.getElementById("form-join-workspace");
   if (formJoin) {
     formJoin.addEventListener("submit", (e) => {
@@ -521,7 +493,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Segmented control (Perusta / Liity)
   const tabCreate = document.getElementById("tab-mode-create");
   const tabJoin = document.getElementById("tab-mode-join");
   const panelCreate = document.getElementById("panel-create-workspace");
@@ -543,7 +514,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Säännön lisäyslomake
   const formAddRule = document.getElementById("form-add-rule");
   if (formAddRule) {
     formAddRule.addEventListener("submit", (e) => {
@@ -568,7 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Roolin lisäyslomake
   const formAddRole = document.getElementById("form-add-role");
   if (formAddRole) {
     formAddRole.addEventListener("submit", (e) => {
@@ -594,7 +563,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Tehtävän lisäyslomake
   const formAddTask = document.getElementById("form-add-task");
   if (formAddTask) {
     formAddTask.addEventListener("submit", (e) => {
@@ -621,7 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Alustetaan UI
   updateWorkspaceUI();
   renderRules();
   renderRoles();
