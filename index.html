@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="fi">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rooliruutu - Opiskelijatiimin Pelisäännöt ja Työtila</title>
-    <meta name="description" content="Rooliruutu on korkeakouluopiskelijoiden ryhmätyön tueksi kehitetty selkeä työtila pelisääntöjen, roolien ja tehtävätaulun hallintaan." />
-    <link rel="icon" type="image/svg+xml" href="logo.svg" />
-    <link rel="stylesheet" href="src/index.css" />
+    <meta name="description" content="Rooliruutu on korkeakouluopiskelijoiden ryhmätyön tueksi kehitetty selkeä työtila pelisääntöjen, roolien ja tehtävätaulun hallintaan.">
+    <meta property="og:title" content="Rooliruutu - Opiskelijatiimin Pelisäännöt ja Työtila">
+    <meta property="og:description" content="Rooliruutu on korkeakouluopiskelijoiden ryhmätyön tueksi kehitetty selkeä työtila pelisääntöjen, roolien ja tehtävätaulun hallintaan.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="stylesheet" href="src/index.css">
     <script src="src/script.js" defer></script>
   </head>
   <body>
@@ -15,7 +18,7 @@
       <div class="site-wrapper">
         <div class="header-inner">
           <a href="#" id="brand-home-link" class="brand-container" title="Siirry työtilan aloitukseen">
-            <img src="logo.svg" alt="Rooliruutu logo" class="brand-logo" width="44" height="44" />
+            <img src="logo.svg" alt="Rooliruutu logo" class="brand-logo" width="44" height="44">
             <div>
               <span class="brand-title">Rooliruutu</span>
               <span class="brand-subtitle">Opiskelijatiimin työtila &amp; pelisäännöt</span>
@@ -35,9 +38,7 @@
     <main class="main-content">
       <div class="site-wrapper">
 
-        <!-- ===================================================================
-             SIVU 1: TYÖTILAN PERUSTAMINEN / LIITTYMINEN (KIRJAUTUMISSIVU)
-             =================================================================== -->
+        <!-- SIVU 1: TYÖTILAN PERUSTAMINEN / LIITTYMINEN -->
         <section id="view-workspace" class="screen-view active">
           <div class="screen-header">
             <h1>Työtilan perustaminen tai liittyminen</h1>
@@ -47,7 +48,7 @@
             </p>
           </div>
 
-          <!-- AKTIIVISEN TYÖTILAN KORTTI (ETUSIVULLA HYVIN PIENESTI POISTUMISNAPPI) -->
+          <!-- AKTIIVISEN TYÖTILAN KORTTI -->
           <article class="workspace-active-box" id="workspace-active-box">
             <div class="workspace-active-details">
               <span class="workspace-active-badge">✓ Työtila aktiivinen</span>
@@ -68,7 +69,7 @@
           </article>
 
           <!-- TYÖTILAN VALINTA / PERUSTAMINEN -->
-          <article class="card" id="workspace-setup-card">
+          <div class="card" id="workspace-setup-card">
             <div class="segmented-control" role="tablist">
               <button type="button" class="segment-btn active" id="tab-mode-create" role="tab">
                 Perusta uusi työtila
@@ -83,11 +84,11 @@
               <form id="form-create-workspace">
                 <div class="form-group">
                   <label for="input-create-name" class="form-label">Työtilan tai projektin nimi</label>
-                  <input type="text" id="input-create-name" class="form-input" required value="Digipalveluiden kehitysprojekti" placeholder="Esim. Ohjelmistotuotanto Ryhmä 4" />
+                  <input type="text" id="input-create-name" class="form-input" required value="Digipalveluiden kehitysprojekti" placeholder="Esim. Ohjelmistotuotanto Ryhmä 4">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Automaattinen liittymiskoodi</label>
-                  <input type="text" class="form-input" value="ROOLI-8492 (generoidaan automaattisesti)" disabled />
+                  <input type="text" class="form-input" value="ROOLI-8492 (generoidaan automaattisesti)" disabled>
                 </div>
                 <button type="submit" class="btn btn-primary">
                   Perusta työtila ja siirry sääntöihin &rarr;
@@ -100,18 +101,18 @@
               <form id="form-join-workspace">
                 <div class="form-group">
                   <label for="input-join-code" class="form-label">Syötä tiimisi liittymiskoodi</label>
-                  <input type="text" id="input-join-code" class="form-input" required placeholder="Esim. ROOLI-8492" />
+                  <input type="text" id="input-join-code" class="form-input" required placeholder="Esim. ROOLI-8492">
                 </div>
                 <div class="form-group">
                   <label for="input-join-member-name" class="form-label">Oma nimesi</label>
-                  <input type="text" id="input-join-member-name" class="form-input" placeholder="Esim. Sara Virtanen" />
+                  <input type="text" id="input-join-member-name" class="form-input" placeholder="Esim. Sara Virtanen">
                 </div>
                 <button type="submit" class="btn btn-primary">
                   Liity työtilaan &rarr;
                 </button>
               </form>
             </div>
-          </article>
+          </div>
 
           <!-- TIETOA OPISKELIJARYHMÄN YHTEISTYÖSTÄ -->
           <article class="card">
@@ -123,9 +124,7 @@
           </article>
         </section>
 
-        <!-- ===================================================================
-             SIVU 2: TIIMIN PELISÄÄNNÖT
-             =================================================================== -->
+        <!-- SIVU 2: TIIMIN PELISÄÄNNÖT -->
         <section id="view-rules" class="screen-view">
           <div class="screen-header">
             <h1>Tiimin sovitut pelisäännöt</h1>
@@ -137,9 +136,7 @@
 
           <!-- 1. PELISÄÄNNÖT -LISTAUS -->
           <h2>Sovitut pelisäännöt</h2>
-          <div class="rules-grid" id="rules-container">
-            <!-- Säännöt renderöidään JavaScriptillä -->
-          </div>
+          <div class="rules-grid" id="rules-container"></div>
 
           <!-- UUDEN SÄÄNNÖN LISÄYS -->
           <article class="card">
@@ -148,7 +145,7 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="input-rule-title" class="form-label">Säännön otsikko</label>
-                  <input type="text" id="input-rule-title" class="form-input" required placeholder="Esim. Kamerat päällä palavereissa" />
+                  <input type="text" id="input-rule-title" class="form-input" required placeholder="Esim. Kamerat päällä palavereissa">
                 </div>
                 <div class="form-group">
                   <label for="select-rule-category" class="form-label">Kategoria</label>
@@ -168,7 +165,7 @@
             </form>
           </article>
 
-          <!-- 2. YHTEISTYÖN KULTAISET PERIAATTEET (UL-LISTA) -->
+          <!-- 2. YHTEISTYÖN KULTAISET PERIAATTEET -->
           <article class="card">
             <h2>Yhteistyön kultaiset periaatteet</h2>
             <ul class="styled-unordered-list">
@@ -189,9 +186,7 @@
 
           <!-- 3. TIIMIN ROOLIT JA CUSTOM-ROOLIT -->
           <h2>Tiimin roolit ja jäsenet</h2>
-          <div class="roles-grid" id="roles-container">
-            <!-- Roolit renderöidään JavaScriptillä -->
-          </div>
+          <div class="roles-grid" id="roles-container"></div>
 
           <!-- UUDEN ROOLIN LISÄYS -->
           <article class="card">
@@ -200,25 +195,23 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="input-role-name" class="form-label">Opiskelijan nimi</label>
-                  <input type="text" id="input-role-name" class="form-input" required placeholder="Esim. Laura Koskinen" />
+                  <input type="text" id="input-role-name" class="form-input" required placeholder="Esim. Laura Koskinen">
                 </div>
                 <div class="form-group">
                   <label for="input-role-title" class="form-label">Roolin nimike</label>
-                  <input type="text" id="input-role-title" class="form-input" required placeholder="Esim. Scrum Master / Sisällöntuottaja" />
+                  <input type="text" id="input-role-title" class="form-input" required placeholder="Esim. Scrum Master / Sisällöntuottaja">
                 </div>
               </div>
               <div class="form-group">
                 <label for="input-role-resp" class="form-label">Vastuualueet ja tehtävät</label>
-                <input type="text" id="input-role-resp" class="form-input" placeholder="Mistä asioista tämä rooli ensisijaisesti vastaa..." />
+                <input type="text" id="input-role-resp" class="form-input" placeholder="Mistä asioista tämä rooli ensisijaisesti vastaa...">
               </div>
               <button type="submit" class="btn btn-primary">Lisää rooli tiimiin</button>
             </form>
           </article>
         </section>
 
-        <!-- ===================================================================
-             SIVU 3: TEHTÄVÄTAULU (KANBAN)
-             =================================================================== -->
+        <!-- SIVU 3: TEHTÄVÄTAULU (KANBAN) -->
         <section id="view-tasks" class="screen-view">
           <div class="screen-header">
             <h1>Projektin tehtävätaulu &amp; välitavoitteet</h1>
@@ -253,20 +246,20 @@
           <!-- KOMPAKTI UUDEN TEHTÄVÄN LISÄYS (SIVUN YLÄOSASSA) -->
           <div class="task-add-compact-card">
             <div class="task-add-compact-header">
-              <h3 class="task-add-compact-title">+ Lisää uusi tehtävä projektille</h3>
+              <h2 class="task-add-compact-title">+ Lisää uusi tehtävä projektille</h2>
             </div>
             <form id="form-add-task" class="task-add-compact-form">
               <div class="task-add-field task-add-field-title">
                 <label for="input-task-title" class="task-add-compact-label">Tehtävän kuvaus</label>
-                <input type="text" id="input-task-title" class="form-input form-input-compact" required placeholder="Mitä tehdään? Esim. Käyttöliittymäluonnos" />
+                <input type="text" id="input-task-title" class="form-input form-input-compact" required placeholder="Mitä tehdään? Esim. Käyttöliittymäluonnos">
               </div>
               <div class="task-add-field task-add-field-assignee">
                 <label for="input-task-assignee" class="task-add-compact-label">Vastuuhenkilö</label>
-                <input type="text" id="input-task-assignee" class="form-input form-input-compact" placeholder="Esim. Matti" />
+                <input type="text" id="input-task-assignee" class="form-input form-input-compact" placeholder="Esim. Matti">
               </div>
               <div class="task-add-field task-add-field-deadline">
                 <label for="input-task-deadline" class="task-add-compact-label">Määräaika</label>
-                <input type="text" id="input-task-deadline" class="form-input form-input-compact" placeholder="Esim. 15.11." />
+                <input type="text" id="input-task-deadline" class="form-input form-input-compact" placeholder="Esim. 15.11.">
               </div>
               <div class="task-add-field task-add-field-status">
                 <label for="select-task-status" class="task-add-compact-label">Vaihe</label>
@@ -295,9 +288,7 @@
                 </div>
                 <span class="kanban-count badge-todo" id="badge-count-todo">0</span>
               </div>
-              <div class="kanban-tasks-list" id="tasks-col-todo">
-                <!-- Renderöidään JS:llä -->
-              </div>
+              <div class="kanban-tasks-list" id="tasks-col-todo"></div>
             </div>
 
             <!-- SARAKE 2: TYÖN ALLA -->
@@ -309,9 +300,7 @@
                 </div>
                 <span class="kanban-count badge-in-progress" id="badge-count-in-progress">0</span>
               </div>
-              <div class="kanban-tasks-list" id="tasks-col-in-progress">
-                <!-- Renderöidään JS:llä -->
-              </div>
+              <div class="kanban-tasks-list" id="tasks-col-in-progress"></div>
             </div>
 
             <!-- SARAKE 3: VALMIS -->
@@ -323,9 +312,7 @@
                 </div>
                 <span class="kanban-count badge-done" id="badge-count-done">0</span>
               </div>
-              <div class="kanban-tasks-list" id="tasks-col-done">
-                <!-- Renderöidään JS:llä -->
-              </div>
+              <div class="kanban-tasks-list" id="tasks-col-done"></div>
             </div>
           </div>
         </section>
@@ -333,7 +320,30 @@
       </div>
     </main>
 
-    <!-- 3. KIINTEÄ ALAPALKKI (BOTTOM NAVIGATION BAR) -->
+    <!-- 3. ALATUNNISTE (FOOTER) -->
+    <footer class="site-footer">
+      <div class="site-wrapper footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand-wrap">
+            <span class="footer-brand">Rooliruutu</span>
+            <p class="footer-text">Korkeakouluopiskelijoiden selkeä työtila ryhmätöiden pelisäännöille, rooleille ja tehtävätaululle.</p>
+          </div>
+          <nav class="footer-nav" aria-label="Alatunnisteen pikalinkit">
+            <ul class="footer-links-list">
+              <li><a href="#tyotila" data-screen-link="view-workspace" class="footer-link">1. Työtila</a></li>
+              <li><a href="#pelisaannot" data-screen-link="view-rules" class="footer-link">2. Pelisäännöt</a></li>
+              <li><a href="#tehtavataulu" data-screen-link="view-tasks" class="footer-link">3. Tehtävätaulu</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&copy; Rooliruutu - Opiskelijatiimin työtila</span>
+          <span>Toteutettu saavutettavuuden ja HTML5-suositusten mukaisesti</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 4. KIINTEÄ ALAPALKKI (BOTTOM NAVIGATION BAR) -->
     <nav class="bottom-nav-bar" aria-label="Sivujen alapalkki">
       <div class="bottom-nav-container">
         <button type="button" class="nav-tab active" data-target="view-workspace">
