@@ -13,7 +13,6 @@
     <script src="src/script.js" defer></script>
   </head>
   <body>
-    <!-- 1. YLÄTUNNISTE (HEADER) -->
     <header class="site-header">
       <div class="site-wrapper">
         <div class="header-inner">
@@ -34,11 +33,9 @@
       </div>
     </header>
 
-    <!-- 2. PÄÄSISÄLTÖ (MAIN) -->
     <main class="main-content">
       <div class="site-wrapper">
 
-        <!-- SIVU 1: TYÖTILAN PERUSTAMINEN / LIITTYMINEN -->
         <section id="view-workspace" class="screen-view active">
           <div class="screen-header">
             <h1>Työtilan perustaminen tai liittyminen</h1>
@@ -48,7 +45,6 @@
             </p>
           </div>
 
-          <!-- AKTIIVISEN TYÖTILAN KORTTI -->
           <article class="workspace-active-box" id="workspace-active-box">
             <div class="workspace-active-details">
               <span class="workspace-active-badge">✓ Työtila aktiivinen</span>
@@ -68,7 +64,6 @@
             </div>
           </article>
 
-          <!-- TYÖTILAN VALINTA / PERUSTAMINEN -->
           <div class="card" id="workspace-setup-card">
             <div class="segmented-control" role="tablist">
               <button type="button" class="segment-btn active" id="tab-mode-create" role="tab">
@@ -79,7 +74,6 @@
               </button>
             </div>
 
-            <!-- PERUSTA UUSI TYÖTILA -->
             <div id="panel-create-workspace">
               <form id="form-create-workspace">
                 <div class="form-group">
@@ -96,7 +90,6 @@
               </form>
             </div>
 
-            <!-- LIITY KOODILLA -->
             <div id="panel-join-workspace" class="hidden">
               <form id="form-join-workspace">
                 <div class="form-group">
@@ -114,7 +107,6 @@
             </div>
           </div>
 
-          <!-- TIETOA OPISKELIJARYHMÄN YHTEISTYÖSTÄ -->
           <article class="card">
             <h2>Miksi yhteinen työtila kannattaa perustaa?</h2>
             <p>
@@ -124,7 +116,6 @@
           </article>
         </section>
 
-        <!-- SIVU 2: TIIMIN PELISÄÄNNÖT -->
         <section id="view-rules" class="screen-view">
           <div class="screen-header">
             <h1>Tiimin sovitut pelisäännöt</h1>
@@ -134,11 +125,9 @@
             </p>
           </div>
 
-          <!-- 1. PELISÄÄNNÖT -LISTAUS -->
           <h2>Sovitut pelisäännöt</h2>
           <div class="rules-grid" id="rules-container"></div>
 
-          <!-- UUDEN SÄÄNNÖN LISÄYS -->
           <article class="card">
             <h3>+ Lisää uusi pelisääntö</h3>
             <form id="form-add-rule">
@@ -165,7 +154,6 @@
             </form>
           </article>
 
-          <!-- 2. YHTEISTYÖN KULTAISET PERIAATTEET -->
           <article class="card">
             <h2>Yhteistyön kultaiset periaatteet</h2>
             <ul class="styled-unordered-list">
@@ -184,11 +172,9 @@
             </ul>
           </article>
 
-          <!-- 3. TIIMIN ROOLIT JA CUSTOM-ROOLIT -->
           <h2>Tiimin roolit ja jäsenet</h2>
           <div class="roles-grid" id="roles-container"></div>
 
-          <!-- UUDEN ROOLIN LISÄYS -->
           <article class="card">
             <h3>+ Lisää tiimiläinen tai custom-rooli</h3>
             <form id="form-add-role">
@@ -211,7 +197,6 @@
           </article>
         </section>
 
-        <!-- SIVU 3: TEHTÄVÄTAULU (KANBAN) -->
         <section id="view-tasks" class="screen-view">
           <div class="screen-header">
             <h1>Projektin tehtävätaulu &amp; välitavoitteet</h1>
@@ -220,7 +205,6 @@
             </p>
           </div>
 
-          <!-- TILASTOPALKKI -->
           <div class="tasks-stats-bar">
             <div class="stat-pill stat-pill-total">
               <span class="stat-pill-label">Yhteensä</span>
@@ -243,7 +227,6 @@
             </div>
           </div>
 
-          <!-- KOMPAKTI UUDEN TEHTÄVÄN LISÄYS (SIVUN YLÄOSASSA) -->
           <div class="task-add-compact-card">
             <div class="task-add-compact-header">
               <h2 class="task-add-compact-title">+ Lisää uusi tehtävä projektille</h2>
@@ -277,7 +260,6 @@
             </form>
           </div>
 
-          <!-- KANBAN-SARAKKEET -->
           <div class="kanban-board">
             <!-- SARAKE 1: SUUNNITELTU -->
             <div class="kanban-column kanban-col-todo">
@@ -291,7 +273,6 @@
               <div class="kanban-tasks-list" id="tasks-col-todo"></div>
             </div>
 
-            <!-- SARAKE 2: TYÖN ALLA -->
             <div class="kanban-column kanban-col-in-progress">
               <div class="kanban-column-header">
                 <div class="kanban-header-left">
@@ -303,7 +284,6 @@
               <div class="kanban-tasks-list" id="tasks-col-in-progress"></div>
             </div>
 
-            <!-- SARAKE 3: VALMIS -->
             <div class="kanban-column kanban-col-done">
               <div class="kanban-column-header">
                 <div class="kanban-header-left">
@@ -320,7 +300,6 @@
       </div>
     </main>
 
-    <!-- 3. ALATUNNISTE (FOOTER) -->
     <footer class="site-footer">
       <div class="site-wrapper footer-inner">
         <div class="footer-top">
@@ -343,7 +322,6 @@
       </div>
     </footer>
 
-    <!-- 4. KIINTEÄ ALAPALKKI (BOTTOM NAVIGATION BAR) -->
     <nav class="bottom-nav-bar" aria-label="Sivujen alapalkki">
       <div class="bottom-nav-container">
         <button type="button" class="nav-tab active" data-target="view-workspace">
